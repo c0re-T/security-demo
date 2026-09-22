@@ -41,9 +41,16 @@ public class WebSecurityConfig {
                 // 已认证的请求会被自动授权
                 .authenticated()
         )
-        .formLogin(withDefaults()) // 使用表单授权方式
+        // 使用表单授权方式
+        .formLogin(form -> form
+                .loginPage("/login")
+                .permitAll() // 无需授权访问页面
+                .usernameParameter("myusername") // 自定义用户名参数名
+                .passwordParameter("mypassword") // 自定义密码参数名
+                .failureUrl("/login?failure") // 登录失败后的 URL
+        );
         // .httpBasic(withDefaults()) // 使用基本授权方式
-        .csrf(csrf -> csrf.disable()); // 禁用 CSRF 保护
+        // .csrf(csrf -> csrf.disable()); // 禁用 CSRF 保护
         return http.build();
     }
 

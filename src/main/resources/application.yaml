@@ -16,9 +16,6 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-
-
-# server:
-#   servlet:
-#     context-path: /demo
+server:
+  servlet:
+    context-path: /demo
