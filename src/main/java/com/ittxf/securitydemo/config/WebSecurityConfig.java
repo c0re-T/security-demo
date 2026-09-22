@@ -17,6 +17,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+    private final MyLogoutSuccessHandler myLogoutSuccessHandler;
+    private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
 
     // 直接把 BCryptPasswordEncoder 作为 Bean 交给 Spring 管理
     @Bean
@@ -53,9 +56,17 @@ public class WebSecurityConfig {
                 .passwordParameter("mypassword") // 自定义密码参数名
                 .failureUrl("/login?failure") // 登录失败后的 URL
                 .successHandler(myAuthenticationSuccessHandler) // 认证成功后的处理
-        );
+                .failureHandler(myAuthenticationFailureHandler) // 认证失败后的处理
+        )
+        .logout(logout -> logout
+                .logoutSuccessHandler(myLogoutSuccessHandler) // 登出成功后的处理
+        )
+        .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(myAuthenticationEntryPoint)
+        )
+        .cors(withDefaults())
         // .httpBasic(withDefaults()) // 使用基本授权方式
-        // .csrf(csrf -> csrf.disable()); // 禁用 CSRF 保护
+        .csrf(csrf -> csrf.disable()); // 禁用 CSRF 保护
         return http.build();
     }
 
