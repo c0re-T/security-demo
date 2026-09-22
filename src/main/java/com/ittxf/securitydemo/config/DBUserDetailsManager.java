@@ -25,12 +25,16 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
     }
 
     @Override
-    public void createUser(UserDetails user) {
-
+    public void createUser(UserDetails userDetails) {
+        User user = new User();
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setEnabled(true);
+        userMapper.insert(user);
     }
 
     @Override
-    public void updateUser(UserDetails user) {
+    public void updateUser(UserDetails userDetails) {
 
     }
 

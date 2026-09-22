@@ -3,9 +3,7 @@ package com.ittxf.securitydemo.controller;
 import com.ittxf.securitydemo.entity.User;
 import com.ittxf.securitydemo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +17,10 @@ public class UserController {
     @GetMapping("/list")
     public List<User> getList() {
         return userService.list();
+    }
+
+    @PostMapping("/save")
+    public void add(@RequestBody User user) {
+        userService.saveUserDetails(user);
     }
 }
