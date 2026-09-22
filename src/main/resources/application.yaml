@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: security-demo
+server:
+  servlet:
+    context-path: /demo
