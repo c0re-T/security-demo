@@ -1,5 +1,6 @@
 package com.ittxf.securitydemo.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +13,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity // 开启springsecurity的web安全功能（在springboot中可以省略此注解）
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
     // 直接把 BCryptPasswordEncoder 作为 Bean 交给 Spring 管理
     @Bean
@@ -48,6 +52,7 @@ public class WebSecurityConfig {
                 .usernameParameter("myusername") // 自定义用户名参数名
                 .passwordParameter("mypassword") // 自定义密码参数名
                 .failureUrl("/login?failure") // 登录失败后的 URL
+                .successHandler(myAuthenticationSuccessHandler) // 认证成功后的处理
         );
         // .httpBasic(withDefaults()) // 使用基本授权方式
         // .csrf(csrf -> csrf.disable()); // 禁用 CSRF 保护
