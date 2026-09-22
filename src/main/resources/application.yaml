@@ -1,6 +1,10 @@
 spring:
   application:
     name: security-demo
-server:
-  servlet:
-    context-path: /demo
+  security:
+    user:
+      name: admin
+      password: 123
+# server:
+#   servlet:
+#     context-path: /demo
