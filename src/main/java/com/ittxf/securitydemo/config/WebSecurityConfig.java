@@ -1,13 +1,19 @@
 package com.ittxf.securitydemo.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity // 开启springsecurity的web安全功能（在springboot中可以省略此注解）
@@ -19,7 +25,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder(); // 这里就写具体的实现类
     }
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService() {
         // 创建基于内存的用户信息管理器
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -29,6 +35,20 @@ public class WebSecurityConfig {
                 User.withUsername("user").password(passwordEncoder().encode("123456")).roles("USER").build()
         );
         return manager;
+    }*/
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // 开启授权保护
+        http.authorizeHttpRequests(authorize -> authorize
+                // 对所有请求开启授权保护
+                .anyRequest()
+                // 已认证的请求会被自动授权
+                .authenticated()
+        )
+        .formLogin(withDefaults()) // 使用表单授权方式
+        /*.httpBasic(withDefaults())*/; // 使用基本授权方式
+        return http.build();
     }
 
 }
