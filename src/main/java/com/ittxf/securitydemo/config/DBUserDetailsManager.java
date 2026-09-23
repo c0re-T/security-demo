@@ -92,8 +92,9 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
                     .disabled(!user.isEnabled())
                     .credentialsExpired(false) // 用户凭证是否过期
                     .accountExpired(false) // 账号是否过期
-                    .accountLocked(false) // 账号是否锁定
+                    .accountLocked(false) // 账号是否锁定                    .roles("ADMIN")
                     .roles("ADMIN")
+                    .authorities("USER_LIST", "USER_ADD") // 会覆盖角色
                     .build();
         }else {
             throw new UsernameNotFoundException(username);
