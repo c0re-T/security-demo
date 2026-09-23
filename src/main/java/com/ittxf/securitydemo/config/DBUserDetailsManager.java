@@ -26,11 +26,12 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
 
     @Override
     public void createUser(UserDetails userDetails) {
-        User user = new User();
+        throw new UnsupportedOperationException("请使用UserService注册用户");
+        /*User user = new User();
         user.setUsername(userDetails.getUsername());
         user.setPassword(userDetails.getPassword());
         user.setEnabled(true);
-        userMapper.insert(user);
+        userMapper.insert(user);*/
     }
 
     @Override

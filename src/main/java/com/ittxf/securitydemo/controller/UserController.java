@@ -20,7 +20,8 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public void add(@RequestBody User user) {
-        userService.saveUserDetails(user);
+    public boolean add(@RequestBody User user) {
+        // userService.saveUserDetails(user);
+        return userService.save(user);
     }
 }

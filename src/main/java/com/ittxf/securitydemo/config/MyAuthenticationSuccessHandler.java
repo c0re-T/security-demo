@@ -6,10 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 
 @Component
@@ -21,7 +23,10 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 1. 获取用户身份信息
-        Object principal = authentication.getPrincipal();
+        Object principal = authentication.getPrincipal(); // 获取用户身份信息
+        // Object credentials = authentication.getCredentials(); // 获取用户凭证信息
+        // Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities(); // 获取用户权限信息
+
         // 2. 创建结果对象（建议加上泛型，避免编译警告）
         HashMap result = new HashMap();
         result.put("code", 0);

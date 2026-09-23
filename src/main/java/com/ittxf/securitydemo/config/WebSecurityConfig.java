@@ -20,6 +20,7 @@ public class WebSecurityConfig {
     private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     private final MyLogoutSuccessHandler myLogoutSuccessHandler;
     private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+    private final MySessionInformationExpiredStrategy mySessionInformationExpiredStrategy;
 
     // 直接把 BCryptPasswordEncoder 作为 Bean 交给 Spring 管理
     @Bean
@@ -50,8 +51,8 @@ public class WebSecurityConfig {
         )
         // 使用表单授权方式
         .formLogin(form -> form
-                .loginPage("/login")
-                .permitAll() // 无需授权访问页面
+                .loginPage("/login") // 登录页面的 URL
+                .permitAll() // 无需授权访问登录页面
                 .usernameParameter("myusername") // 自定义用户名参数名
                 .passwordParameter("mypassword") // 自定义密码参数名
                 .failureUrl("/login?failure") // 登录失败后的 URL
@@ -63,6 +64,10 @@ public class WebSecurityConfig {
         )
         .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(myAuthenticationEntryPoint)
+        )
+        .sessionManagement(session -> session
+                .maximumSessions(1)
+                .expiredSessionStrategy(mySessionInformationExpiredStrategy)
         )
         .cors(withDefaults())
         // .httpBasic(withDefaults()) // 使用基本授权方式
