@@ -68,7 +68,7 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
         User user = userMapper.selectOne(wrapper);
         if (user != null) {
             // 此处是硬编码，实际开发中应从数据库中获取权限
-            ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+            /*ArrayList<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new GrantedAuthority() {
                 @Override
                 public String getAuthority() {
@@ -85,7 +85,16 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
                     true, // 用户凭证是否过期
                     true, // 用户是否未锁定
                     authorities // 权限列表
-            );
+            );*/
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .disabled(!user.isEnabled())
+                    .credentialsExpired(false) // 用户凭证是否过期
+                    .accountExpired(false) // 账号是否过期
+                    .accountLocked(false) // 账号是否锁定
+                    .roles("ADMIN")
+                    .build();
         }else {
             throw new UsernameNotFoundException(username);
         }
