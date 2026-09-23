@@ -5,6 +5,7 @@ import com.ittxf.securitydemo.entity.User;
 import com.ittxf.securitydemo.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -66,6 +67,16 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
         wrapper.eq(User::getUsername, username);
         User user = userMapper.selectOne(wrapper);
         if (user != null) {
+            // 此处是硬编码，实际开发中应从数据库中获取权限
+            ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new GrantedAuthority() {
+                @Override
+                public String getAuthority() {
+                    return "USER_LIST";
+                }
+            }); // 匿名内部类，两种写法均可
+            authorities.add(() -> "USER_ADD"); // 添加一个权限，例如 "USER_ADD"
+
             return new org.springframework.security.core.userdetails.User(
                     user.getUsername(),
                     user.getPassword(),
@@ -73,7 +84,7 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
                     true, // 账号是否未过期
                     true, // 用户凭证是否过期
                     true, // 用户是否未锁定
-                    new ArrayList<>() // 权限列表
+                    authorities // 权限列表
             );
         }else {
             throw new UsernameNotFoundException(username);

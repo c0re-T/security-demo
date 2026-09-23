@@ -44,6 +44,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // 开启授权保护
         http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/user/list").hasAuthority("USER_LIST")
+                .requestMatchers("/user/save").hasAuthority("USER_SAVE")
                 // 对所有请求开启授权保护
                 .anyRequest()
                 // 已认证的请求会被自动授权
